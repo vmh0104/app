@@ -40,7 +40,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ae35ec2 (Initial commit)
 module.exports = app;
 
 

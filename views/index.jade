@@ -3,8 +3,37 @@ extends layout
 block content
   h1= title
   p File Upload Service
+  input#file(type='file')
   button(id="upload") Upload
-  
+  script.
+        document.getElementById('upload').addEventListener('click', () => {
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                console.error('No file selected.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                document.getElementById('status').innerHTML = 'File uploaded successfully: ' + file.name;
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+                document.getElementById('status').innerHTML = 'Error uploading file.';
+            });
+        });
+    
 
   
 
