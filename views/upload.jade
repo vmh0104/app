@@ -2,18 +2,7 @@ extends layout_upload
 
 block content1 
     h1= title
-    input#file(type='file', accept=".csv")
-    button(id="upload") Upload
-    script.
-        document.getElementById('upload').addEventListener('click', () => {
-            const fileInput = document.getElementById('file');
-            const file = fileInput.files[0];
-            const formData = new FormData();
-            formData.append('file', file);
-            fetch('http://localhost:3000/upload?fileName=file.csv',{
-                method: 'POST',
-                body: formData,
-            })
-            
-        });
-    
+    form(action='/upload', method = 'POST')
+        input#myFile(type='file', name='filename',accept = ".csv" )
+        input(type='submit')
+        
