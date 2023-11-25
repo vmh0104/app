@@ -2,7 +2,8 @@ extends layout_upload
 
 block content1 
     h1= title
-    form(action='/upload', method = 'POST')
-        input#myFile(type='file', name='filename',accept = ".csv" )
-        input(type='submit')
-        
+    form(action='/upload?fileName=file.csv', method = 'POST')
+        input#myFile(type='file', name='filename',accept = ".csv",enctype="multipart/form-data" )
+        input(type='submit', value="Upload")
+     
+   
