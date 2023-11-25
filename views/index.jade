@@ -3,7 +3,7 @@ extends layout
 block content
   h1= title
   p File Upload Service
-  input#file(type='file')
+  input#file(type='file', accept=".csv")
   button(id="upload") Upload
   script.
         document.getElementById('upload').addEventListener('click', () => {
