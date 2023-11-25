@@ -5,12 +5,11 @@ router.get('/upload', function(req, res, next) {
       res.render('upload', { title: 'Choose File' });    
   });
 
-
 router.post('/upload', function(req, res, next) {
     console.log('Handling POST /upload');
 
-    const queryString = req.url.split('?')[1];
-    const fileName = new URLSearchParams(queryString).get('fileName');
+    
+    const fileName = req.query.fileName;
 
     if (!fileName) {
         console.error('Bad Request: Missing file name.');
