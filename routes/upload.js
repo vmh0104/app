@@ -4,7 +4,8 @@ var router = express.Router();
 
 
 router.get('/upload', function(req, res, next) {
-      res.render('upload', { title: 'Choose File' });    
+      res.render('upload', { title: 'Choose File' });
+      console.log('Handling GET /upload');    
   });
 
 router.post('/upload', function(req, res, next) {
