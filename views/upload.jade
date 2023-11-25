@@ -8,11 +8,8 @@ block content1
         document.getElementById('upload').addEventListener('click', () => {
             const fileInput = document.getElementById('file');
             const file = fileInput.files[0];
-            
-
             const formData = new FormData();
             formData.append('file', file);
-
             fetch('http://localhost:3000/upload?fileName=file.csv',{
                 method: 'POST',
                 body: formData,
