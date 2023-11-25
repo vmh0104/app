@@ -6,16 +6,15 @@ router.get('/upload', function(req, res, next) {
   res.render('index', { title: 'Upload File' });
   console.log("User Router Working");
   console.log('Server running on port 3000');
-  
+  if (req.url === '/upload' && req.method === 'GET') {
+    console.log('Handling GET /upload');
+  }
 
 });
 
 router.post('/upload', function(req, res, next){
     console.log('Received request:', req.url, req.method);
-  if (req.url === '/' && req.method === 'GET') {
-    console.log('Handling GET /');
-    return res.end(fs.readFileSync(__dirname + '/index.jade'));
-  }
+ 
   if (req.url.startsWith('/upload') && req.method === 'POST') {
     console.log('Handling POST /upload');
     const queryString = req.url.split('?')[1];
