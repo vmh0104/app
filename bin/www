@@ -30,22 +30,6 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-server.on('request', (req, res) => {
-  console.log('Received request:', req.url, req.method);
-
-  if (req.url === '/' && req.method === 'GET') {
-      console.log('Handling GET /');
-      return res.end(fs.readFileSync('E:/App/views' + '/index.jade'));
-  }
-
-  if (req.url.startsWith('/upload') && req.method === 'POST') {
-      console.log('Handling POST /upload');
-
-      const queryString = req.url.split('?')[1];
-      const fileName = new URLSearchParams(queryString).get('fileName');
-      console.log(fileName)
-  }
-});
 
 
   /**
