@@ -3,6 +3,7 @@ var router = express.Router();
 var multer = require('multer');
 var upload = multer({ dest: __dirname });
 
+
 router.get('/upload', function(req, res, next) {
       res.render('upload', { title: 'Choose File' });
       console.log('Handling GET /upload');    
@@ -11,7 +12,9 @@ router.get('/upload', function(req, res, next) {
 router.post('/upload',upload.single('filename'), function(req, res, next) {
     console.log('Handling POST /upload');
     console.log(req.file.originalname);
-    res.end(req.file.originalname)
+    const fileName = req.file.originalname;
+    res.cookie('Da upload thanh cong file:', fileName);
+    res.send();
 });
 
 module.exports = router;
