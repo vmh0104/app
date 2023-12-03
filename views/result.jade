@@ -3,5 +3,19 @@ extends layout_result
 block content2 
     h1= title
     h2= fileName
-    
+    h2= title2 + report1 + title3 + report3 + title4 + report2 + title5
+    table
+      thead
+        tr
+          th ID
+          th User
+          th Mail
+          th Bod
+      tbody
+        each row in data
+          tr
+            td= row.id
+            td= row.user
+            td= row.mail
+            td= row.bod
     
