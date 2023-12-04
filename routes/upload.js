@@ -7,8 +7,6 @@ const mysql = require("mysql2");
 const csv = require('csv-parser');
 
 
-
-
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, __dirname);
@@ -77,41 +75,26 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
     const data2 = [];
     const output2CsvFilePath = __dirname + '\\' + 'data.csv';
     fs.createReadStream(csvFilePath)
-    .pipe(csv())
-    .on('data', (row) => {
-      const idValue = row.id?.trim() !== '' ? row.id : null;
-      const userValue = row.user?.trim() !== '' ? row.user : null;
-      const mailValue = row.mail?.trim() !== '' && isValidEmail(row.mail) ? row.mail : null;
-      const bodValue = row.bod?.trim() !== '' && isPastDate(row.bod) ? row.bod : null;
+      .pipe(csv())
+      .on('data', (row) => {
+        const idValue = row.id?.trim() !== '' ? row.id : null;
+        const userValue = row.user?.trim() !== '' ? row.user : null;
+        const mailValue =
+          row.mail?.trim() !== '' && isValidEmail(row.mail) ? row.mail : null;
+        const bodValue =
+          row.bod?.trim() !== '' && isPastDate(row.bod) ? row.bod : null;
 
-      if (idValue !== null && userValue !== null && mailValue !== null && bodValue !== null) {
-        data2.push({ id: idValue, user: userValue, mail: mailValue, bod: bodValue });
-      }
-    })
+        if (idValue !== null && userValue !== null && mailValue !== null && bodValue !== null) {
+          data2.push({ id: idValue, user: userValue, mail: mailValue, bod: bodValue });
+        }
+      })
 
-    .on('end', () => {
+      .on('end', () => {
         console.log('CSV file successfully processed.');
         const newCsvContent = data2.map(row => Object.values(row).join(',')).join('\n');
         fs.writeFileSync(output2CsvFilePath, newCsvContent);
         console.log('New CSV file successfully created:', output2CsvFilePath);
-    })
-
-    .on('error', (error) => {
-        console.error('Error reading CSV file:', error.message);
-    });
-    
-    
-
-// Luu du lieu vao Db
-    const csvFilePath2 = __dirname + '\\' + 'data.csv';
-    const csvData = [];
-    let stream = fs.createReadStream(csvFilePath2);
-    let csvStream = fastcsv
-      .parse()
-      .on('data', (row) => {
-        csvData.push(row);
-      })
-      .on('end', function () {
+        console.log(data2);
         const connection = mysql.createConnection({
           host: '127.0.0.1',
           port: '3306',
@@ -125,20 +108,28 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
           if (error) {
             console.error('Error connecting to the database:', error);
           } else {
-            let query = "INSERT INTO exam_info (ID, User, Mail, Bod) VALUES ?";
-            connection.query(query, [csvData], (error, response) => {
-              if (error) {
-                console.error('Error inserting data into the database:', error);
-              } else {
-                console.log('Data inserted successfully!');
-              }
+            data2.forEach(row => {
+              let id = parseInt(row.id);
+              let query = "INSERT INTO exam_info (ID, User, Mail, Bod) VALUES (?, ?, ?, ?)";
+              let values = [id, row.user, row.mail, row.bod];
+
+              connection.query(query, values, (error, response) => {
+                if (error) {
+                  console.error('Error inserting data into the database:', error);
+                } else {
+                  console.log('Data inserted successfully!');
+                }
+              });
             });
           }
         });
-      });
-    stream.pipe(csvStream);
-});
+      })
 
+      .on('error', (error) => {
+        console.error('Error reading CSV file:', error.message);
+      });
+
+});
 
 module.exports = router;
 
