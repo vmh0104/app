@@ -2,9 +2,31 @@ extends layout_upload
 
 block content1 
     h1= title
-    form(action="/upload"  enctype="multipart/form-data" method="post")
-        input(name="filename", type="file", accept = ".csv")
-        button(type="submit") Upload
-     
-   
+    button(onclick='openDialog()') Upload
+    dialog#myDialog
+        form(action="/upload"  enctype="multipart/form-data" method="post")
+            input(name="filename", type="file", accept = ".csv")
+            button(type="submit") Upload
+            
+    script.
+        const myDialog = document.getElementById('myDialog');
+        function openDialog() {
+        myDialog.showModal();
+        }
+        function closeDialog() {
+        myDialog.close();
+        }
 
+    
+   
+    
+
+
+
+   
+     
+    
+
+
+
+    
