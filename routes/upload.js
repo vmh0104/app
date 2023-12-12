@@ -63,9 +63,9 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
 
         const newCsvContent = wrongData.map(row => Object.values(row).join(',')).join('\n');
         fs.writeFileSync(outputCsvFilePath, newCsvContent);
-        const lengthAllData = allData.length; // Tat ca
-        const lengthWrongData = wrongData.length; // That bai
-        const lengthCorrectData = lengthAllData - lengthWrongData; // Thanh cong
+        const lengthAllData = allData.length; 
+        const lengthWrongData = wrongData.length;
+        const lengthCorrectData = lengthAllData - lengthWrongData;
         const uploadResult = {
           title2: 'Da import thanh cong file csv, voi ',
           report1: lengthAllData,
