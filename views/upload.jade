@@ -4,29 +4,61 @@ block content1
     h1= title
     button(onclick='openDialog()') Upload
     dialog#myDialog
-        form(action="/upload"  enctype="multipart/form-data" method="post")
-            input(name="filename", type="file", accept = ".csv")
-            button(type="submit") Upload
-            
+        form(id="uploadForm" action="/upload" enctype="multipart/form-data" method="post" onsubmit="event.preventDefault(); uploadFile();")
+            input(name="filename", id="fileInput", type="file", accept=".csv")
+            button(type="button" onclick="uploadFile()") Upload
+    #resultContainer
+
     script.
         const myDialog = document.getElementById('myDialog');
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const resultContainer = document.getElementById('resultContainer');
+
         function openDialog() {
-        myDialog.showModal();
+            myDialog.showModal();
         }
+
         function closeDialog() {
-        myDialog.close();
+            myDialog.close();
         }
 
-    
-   
-    
+        function uploadFile() {
+            const formData = new FormData(uploadForm);
 
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+           .then(data => {
 
-
-   
-     
-    
-
-
-
-    
+        closeDialog();
+        resultContainer.innerHTML = `
+            ${data.title2 + data.report1 + data.title3 + data.report3 + data.title4 + data.report2 + data.title5}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Mail</th>
+                            <th>Bod</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.wrongData.map(row => `
+                            <tr>
+                                <td>${row.id}</td>
+                                <td>${row.user}</td>
+                                <td>${row.mail}</td>
+                                <td>${row.bod}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
