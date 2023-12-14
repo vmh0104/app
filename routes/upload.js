@@ -2,10 +2,9 @@ var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 const fs = require("fs");
-const fastcsv = require("fast-csv");
 const mysql = require("mysql2");
 const csv = require('csv-parser');
-const fileUpload = require('express-fileupload');
+
 
 
 var storage = multer.diskStorage({
@@ -74,7 +73,7 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
     })
 
     .on('error', (error) => {
-        console.error('Error reading CSV file:', error.message);
+        
     });
 
 
@@ -126,7 +125,7 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
       })
 
       .on('error', (error) => {
-        console.error('Error reading CSV file:', error.message);
+        
       });
 
 });
