@@ -27,9 +27,6 @@ router.get('/upload', function(req, res, next) {
 router.post('/upload',upload.single('filename'), function(req, res, next) {
     console.log('Handling POST /upload');
    
-
-  // Bao cao ket qua
-
     const csvFilePath = req.file.path;
     const fileName = req.file.originalname;
     let wrongData = [];
@@ -81,63 +78,56 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
     });
 
 
-    
-    // const data2 = [];
-    // const output2CsvFilePath = __dirname + '\\' + 'data.csv';
-    // fs.createReadStream(csvFilePath)
-    //   .pipe(csv())
-    //   .on('data', (row) => {
-    //     const idValue = row.id?.trim() !== '' ? row.id : null;
-    //     const userValue = row.user?.trim() !== '' ? row.user : null;
-    //     const mailValue =
-    //       row.mail?.trim() !== '' && isValidEmail(row.mail) ? row.mail : null;
-    //     const bodValue =
-    //       row.bod?.trim() !== '' && isPastDate(row.bod) ? row.bod : null;
+    const database = [];
+    fs.createReadStream(csvFilePath)
+      .pipe(csv())
+      .on('data', (row) => {
+        const idValue = row.id?.trim() !== '' ? row.id : null;
+        const userValue = row.user?.trim() !== '' ? row.user : null;
+        const mailValue =
+          row.mail?.trim() !== '' && isValidEmail(row.mail) ? row.mail : null;
+        const bodValue =
+          row.bod?.trim() !== '' && isPastDate(row.bod) ? row.bod : null;
 
-    //     if (idValue !== null && userValue !== null && mailValue !== null && bodValue !== null) {
-    //       data2 = [...data2, { ...row, id: idValue, user: userValue, mail: mailValue, bod: bodValue}];
-    //     }
-    //   })
+        if (idValue !== null && userValue !== null && mailValue !== null && bodValue !== null) {
+          database = [...database, { ...row, id: idValue, user: userValue, mail: mailValue, bod: bodValue}];
+        }
+      })
 
-    //   .on('end', () => {
-    //     console.log('CSV file successfully processed.');
-    //     const newCsvContent = data2.map(row => Object.values(row).join(',')).join('\n');
-    //     fs.writeFileSync(output2CsvFilePath, newCsvContent);
-    //     console.log('New CSV file successfully created:', output2CsvFilePath);
-    //     console.log(data2);
-    //     const connection = mysql.createConnection({
-    //       host: '127.0.0.1',
-    //       port: '3306',
-    //       user: 'root',
-    //       password: 'Vhieu0104',
-    //       database: 'exam_database',
-    //       insecureAuth: true,
-    //     });
+      .on('end', () => {
+        const connection = mysql.createConnection({
+          host: '127.0.0.1',
+          port: '3306',
+          user: 'root',
+          password: 'Vhieu0104',
+          database: 'exam_database',
+          insecureAuth: true,
+        });
 
-    //     connection.connect(error => {
-    //       if (error) {
-    //         console.error('Error connecting to the database:', error);
-    //       } else {
-    //         data2.forEach(row => {
-    //           let id = parseInt(row.id);
-    //           let query = "INSERT INTO exam_info (ID, User, Mail, Bod) VALUES (?, ?, ?, ?)";
-    //           let values = [id, row.user, row.mail, row.bod];
+        connection.connect(error => {
+          if (error) {
+            console.error('Error connecting to the database:', error);
+          } else {
+            data2.forEach(row => {
+              let id = parseInt(row.id);
+              let query = "INSERT INTO exam_info (ID, User, Mail, Bod) VALUES (?, ?, ?, ?)";
+              let values = [id, row.user, row.mail, row.bod];
 
-    //           connection.query(query, values, (error, response) => {
-    //             if (error) {
-    //               console.error('Error inserting data into the database:', error);
-    //             } else {
-    //               console.log('Data inserted successfully!');
-    //             }
-    //           });
-    //         });
-    //       }
-    //     });
-    //   })
+              connection.query(query, values, (error, response) => {
+                if (error) {
+                  console.error('Error inserting data into the database:', error);
+                } else {
+                  console.log('Data inserted successfully!');
+                }
+              });
+            });
+          }
+        });
+      })
 
-    //   .on('error', (error) => {
-    //     console.error('Error reading CSV file:', error.message);
-    //   });
+      .on('error', (error) => {
+        console.error('Error reading CSV file:', error.message);
+      });
 
 });
 
