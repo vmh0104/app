@@ -60,9 +60,6 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
     })
 
     .on('end', () => {
-
-        const newCsvContent = wrongData.map(row => Object.values(row).join(',')).join('\n');
-        fs.writeFileSync(outputCsvFilePath, newCsvContent);
         const lengthAllData = allData.length; 
         const lengthWrongData = wrongData.length;
         const lengthCorrectData = lengthAllData - lengthWrongData;
@@ -76,7 +73,7 @@ router.post('/upload',upload.single('filename'), function(req, res, next) {
           title5: ' dong that bai voi nhung ly do sau: ',
           wrongData: wrongData,
         };
-        res.json(uploadResult);             
+        res.json(uploadResult);     
     })
 
     .on('error', (error) => {
