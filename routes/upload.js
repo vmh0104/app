@@ -38,7 +38,6 @@ router.post("/upload", upload.single("filename"), function (req, res, next) {
     const currentDate = new Date();
     return date < currentDate;
   }
-  const outputCsvFilePath = __dirname + "\\" + "result.csv";
   fs.createReadStream(csvFilePath)
     .pipe(csv())
     .on("data", (row) => {
@@ -178,3 +177,4 @@ router.post("/upload", upload.single("filename"), function (req, res, next) {
 });
 
 module.exports = router;
+sdfsdf
