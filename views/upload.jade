@@ -31,19 +31,18 @@ block content1
                 body: formData
             })
             .then(response => response.json())
-           .then(data => {
-
-        closeDialog();
-        resultContainer.innerHTML = `
-            ${data.title2 + data.report1 + data.title3 + data.report3 + data.title4 + data.report2 + data.title5}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>User</th>
-                            <th>Mail</th>
-                            <th>Bod</th>
-                        </tr>
+            .then(data => {
+                closeDialog();
+                resultContainer.innerHTML = `
+                    ${data.title2 + data.report1 + data.title3 + data.report3 + data.title4 + data.report2 + data.title5}
+                        <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Mail</th>
+                                <th>Bod</th>
+                            </tr>
                     </thead>
                     <tbody>
                         ${data.wrongData.map(row => `
@@ -56,9 +55,11 @@ block content1
                         `).join('')}
                     </tbody>
                 </table>
-            `;
-            })
+                    `;
+                    })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
+
+        
